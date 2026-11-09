@@ -12,4 +12,6 @@ The check builds and executes the vignette and examples. PDF manual creation is 
 
 Independent numerical checks cover pairwise AUROC, hand-calculated confusion rates and Brier score, and paired-row bootstrap percentiles.
 
-CI and fresh GitHub installation are recorded separately in the development log. A successful local check is not a substitute for those results.
+Fresh GitHub installation passed in a new R session and destination library, including the built vignette and all five public functions.
+
+CI activation is pending because GitHub rejected the active workflow upload: the current token lacks workflow permission. The ready file and instructions are in docs/ci/. No successful CI run is claimed.

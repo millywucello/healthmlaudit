@@ -1,0 +1,18 @@
+Fresh GitHub installation verification
+Repository: https://github.com/millywucello/healthmlaudit
+Tested package commit: 8a545660704231f072481018f0855e74aedb38c8
+R session: Rscript --vanilla
+Destination: a new temporary library
+Installation: remotes::install_github(..., upgrade = "never", build_vignettes = TRUE)
+
+Checks passed:
+- Package loaded from the new library.
+- Synthetic data contain 400 rows.
+- audit_binary() returned AUROC 0.762892889838267 and Brier score 0.198334616568881.
+- audit_subgroups() retained all 400 observations.
+- bootstrap_ci() returned 100 valid replicates for AUROC and Brier score.
+- plot_calibration() returned a ggplot object.
+- generate_report() wrote the Markdown report and calibration PNG.
+- The installed workflow vignette is available.
+
+This verification does not assert that GitHub Actions has run.

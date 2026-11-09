@@ -10,7 +10,7 @@ optional Markdown report.
 | 1 | Input contract and core metrics | 66 expectations passed at the checkpoint; hand calculations agree | `33f57ad` |
 | 2 | Calibration, subgroup summaries, synthetic data | 113 expectations passed at the checkpoint | `0fa06e2` |
 | 3 | Bootstrap and report generation | 212 expectations passed after additional independent checks | `e3a9ead` |
-| 4 | Documentation, example, CI, and installation | Local package check clean; CI configuration prepared | Current release work |
+| 4 | Documentation, example, CI, and installation | Local package check clean; fresh GitHub install passed; CI activation pending | `8a54566` |
 
 Each milestone has a detailed record in [milestones/](milestones/):
 [core contract](milestones/01_core_contract.md),
@@ -36,8 +36,18 @@ See [release_summary.md](validation/release_summary.md),
 GitHub rejected the workflow upload because the saved personal access token
 lacks the workflow permission. No account permissions were changed. The ready
 workflow is in `docs/ci/R-CMD-check.yaml`, with activation instructions. No CI
-run is claimed. Fresh GitHub installation is checked after publication and its
-result is recorded below.
+run is claimed.
+
+Fresh installation from `millywucello/healthmlaudit` passed in a new R session
+and a new destination library, with `build_vignettes = TRUE`. All five functions
+ran successfully, the vignette was available, the subgroup counts summed to
+400, and both requested bootstrap metrics had 100 valid replicates in the
+installation smoke test. The generated Markdown and PNG files existed.
+The tested package commit was `8a54566`.
+
+The example report and calibration figure were reviewed. Counts are displayed
+as integers, metrics use limited precision, and the figure has labeled axes
+and bin sizes.
 
 ## Remaining course tasks
 
