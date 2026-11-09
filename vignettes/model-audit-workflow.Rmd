@@ -1,0 +1,137 @@
+---
+title: "Audit binary classification predictions"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Audit binary classification predictions}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>", fig.width = 6, fig.height = 5.5)
+```
+
+The package evaluates supplied probabilities. Start with predictions from held-out
+or otherwise appropriate evaluation data. The package cannot determine whether
+the evaluation data were also used for model fitting or threshold selection.
+
+## Inputs and the positive class
+
+```{r}
+library(healthmlaudit)
+head(demo_predictions)
+```
+
+These 400 observations are simulated. The identifiers do not refer to real
+patients. Outcomes are independent Bernoulli draws from logistic probabilities;
+the predicted probabilities use a modified score to illustrate imperfect
+calibration. The two group labels are synthetic, and no model is trained here.
+
+```{r}
+audit <- audit_binary(
+  demo_predictions, truth = "outcome", prob = "predicted_risk",
+  positive = 1, threshold = 0.5
+)
+audit
+```
+
+`positive` determines the event class. The probabilities must refer to that class.
+A factor's first level does not override this choice. The classification rule is
+probability greater than or equal to the threshold.
+
+AUROC describes ranking across positive and negative observations. Accuracy,
+sensitivity, specificity, and precision describe predictions at the chosen
+threshold. Brier score measures squared probability error; smaller values are
+better. A high AUROC does not imply reliable probabilities.
+
+## Inspect calibration
+
+```{r}
+calibration <- plot_calibration(audit, bins = 8)
+calibration
+calibration$data
+```
+
+Each point describes an occupied equal-width interval. Points below the diagonal
+have lower observed event proportions than mean predicted probabilities, while
+points above it have higher proportions. Point size shows the bin count.
+The pattern depends on the binning choice, and the graph is descriptive. It is
+not a significance test or a demonstration of clinical usefulness.
+
+## Compare subgroups
+
+```{r}
+groups <- audit_subgroups(audit, group = "age_group", min_n = 30)
+groups[c("group", "n", "positive_n", "negative_n", "prevalence", "roc_auc", "brier", "warnings")]
+```
+
+The same positive class and threshold apply to both groups. Check their event
+counts as well as their metrics. Differences in prevalence, sampling, or other
+characteristics can affect performance summaries; a subgroup difference alone
+does not establish unfairness or a causal effect.
+
+Missing group labels are retained in a separate NA group. `min_n` flags small
+groups but is not a statistical sufficiency rule. A single-class group has an
+undefined AUROC, returned as NA with an explanation.
+
+## Estimate uncertainty
+
+```{r}
+intervals <- bootstrap_ci(audit, metrics = c("roc_auc", "brier"),
+                          times = 500, conf_level = .95, seed = 42)
+intervals
+```
+
+The bootstrap samples whole rows, keeping the outcome and probability paired.
+Percentile limits use type-7 quantiles. The output records requested, valid,
+and invalid replicates separately for each metric. A one-class resample cannot
+estimate AUROC. Its AUROC is excluded from the interval calculation and counted
+as invalid; a defined Brier score from that same resample is retained.
+
+These intervals assume independent observations. They do not account for model
+retraining, dependence between repeated patient records, or selection of a
+threshold on the same data. Small samples, rare outcomes, and many invalid
+replicates may make the intervals unreliable. Increase `times` for greater
+Monte Carlo stability, but do not treat more resamples as a substitute for more
+evaluation observations.
+
+## Missing or invalid inputs
+
+```{r}
+with_missing <- demo_predictions
+with_missing$predicted_risk[1] <- NA
+tryCatch(audit_binary(with_missing, "outcome", "predicted_risk"),
+         error = function(e) conditionMessage(e))
+```
+
+Explicit omission records what was removed and leaves unrelated columns alone:
+
+```{r}
+omitted <- audit_binary(with_missing, "outcome", "predicted_risk", na_action = "omit")
+omitted$metadata[c("n_input", "n_used", "n_omitted", "omitted_rows")]
+```
+
+Probabilities outside [0, 1], infinite values, and more than two classes are
+errors. The omission option does not excuse invalid observed values.
+
+## Save a report
+
+```{r}
+files <- generate_report(audit, groups, intervals,
+                          file = tempfile(fileext = ".md"))
+all(file.exists(unlist(files)))
+```
+
+For a file in the current directory, use `file = "model_audit.md"`. The report
+references a calibration PNG saved beside it, so share the two files together.
+The output contains aggregate results and warnings, not individual predictions.
+Use `overwrite = TRUE` only when replacing an existing report is intended.
+
+## References
+
+The standard metrics are calculated with [yardstick](https://yardstick.tidymodels.org/).
+See its documentation for [AUROC](https://yardstick.tidymodels.org/reference/roc_auc.html),
+[Brier score](https://yardstick.tidymodels.org/reference/brier_class.html), and
+[classification metrics](https://yardstick.tidymodels.org/reference/sens.html).
+The contribution here is the shared input contract, result handling, and audit
+workflow. The package does not introduce a new metric or a new bootstrap method.

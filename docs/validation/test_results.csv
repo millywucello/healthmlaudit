@@ -1,0 +1,31 @@
+"file","test","nb","failed","skipped","error","warning","passed"
+"test-audit-binary.R","metrics agree with the hand-calculated four-row example",11,0,FALSE,FALSE,0,11
+"test-audit-binary.R","positive class is explicit and independent of factor order",3,0,FALSE,FALSE,0,3
+"test-audit-binary.R","probabilities of the opposite positive class give consistent metrics",4,0,FALSE,FALSE,0,4
+"test-audit-binary.R","AUROC handles ties and reversed rankings",2,0,FALSE,FALSE,0,2
+"test-audit-binary.R","threshold equality is classified as positive",5,0,FALSE,FALSE,0,5
+"test-audit-binary.R","single-class and no-positive-prediction metrics are explicit",9,0,FALSE,FALSE,0,9
+"test-audit-binary.R","print returns the audit invisibly",2,0,FALSE,FALSE,0,2
+"test-bootstrap.R","bootstrap reproduces an independent paired-row Brier calculation",5,0,FALSE,FALSE,0,5
+"test-bootstrap.R","seeded runs are identical and preserve the caller's RNG",4,0,FALSE,FALSE,0,4
+"test-bootstrap.R","undefined AUROC resamples are counted separately from Brier",8,0,FALSE,FALSE,0,8
+"test-bootstrap.R","bootstrap arguments are validated",19,0,FALSE,FALSE,0,19
+"test-calibration.R","calibration bin summaries match hand calculations",7,0,FALSE,FALSE,0,7
+"test-calibration.R","empty bins and exact endpoints are handled without invented data",5,0,FALSE,FALSE,0,5
+"test-calibration.R","calibration parameters and audit objects are checked",10,0,FALSE,FALSE,0,10
+"test-independent-metrics.R","all metrics agree with independent calculations on tied scores",36,0,FALSE,FALSE,0,36
+"test-independent-metrics.R","row order and factor labels do not change performance",2,0,FALSE,FALSE,0,2
+"test-independent-metrics.R","complex inputs and modified results fail clearly",5,0,FALSE,FALSE,0,5
+"test-independent-metrics.R","a supplied seed also preserves the absence of an RNG state",1,0,FALSE,FALSE,0,1
+"test-independent-metrics.R","every supported metric is available to bootstrap",4,0,FALSE,FALSE,0,4
+"test-report.R","report writes aggregate output, intervals, and a calibration PNG",8,0,FALSE,FALSE,0,8
+"test-report.R","report rejects incompatible results and bad destinations",5,0,FALSE,FALSE,0,5
+"test-report.R","single-class warnings appear in the report",2,0,FALSE,FALSE,0,2
+"test-subgroups.R","subgroups reuse settings and account for every retained observation",8,0,FALSE,FALSE,0,8
+"test-subgroups.R","single-class groups report undefined rates and missing labels stay separate",8,0,FALSE,FALSE,0,8
+"test-subgroups.R","unused groups are omitted and optional missingness is not discarded",3,0,FALSE,FALSE,0,3
+"test-subgroups.R","subgroup arguments are validated",6,0,FALSE,FALSE,0,6
+"test-validation.R","invalid data and missing columns have useful errors",5,0,FALSE,FALSE,0,5
+"test-validation.R","invalid probabilities are rejected, even when their truth is missing",5,0,FALSE,FALSE,0,5
+"test-validation.R","missingness is reported without dropping unrelated missing columns",7,0,FALSE,FALSE,0,7
+"test-validation.R","threshold, class, and missingness settings are validated",13,0,FALSE,FALSE,0,13

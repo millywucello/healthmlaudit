@@ -96,7 +96,9 @@ generate_report <- function(audit, subgroup_result = NULL, ci_result = NULL,
 
 .md_table <- function(x) {
   columns <- lapply(x, function(v) {
-    if (is.numeric(v)) v <- ifelse(is.na(v), "NA", format(signif(v, 4), trim = TRUE, scientific = FALSE))
+    if (is.numeric(v)) v <- vapply(v, function(z) {
+      if (is.na(z)) "NA" else format(signif(z, 4), trim = TRUE, scientific = FALSE)
+    }, character(1))
     .md_escape(v)
   })
   body <- do.call(cbind, columns)
