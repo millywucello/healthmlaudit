@@ -2,3 +2,6 @@
 
 S3method(print,healthmlaudit)
 export(audit_binary)
+export(audit_subgroups)
+export(plot_calibration)
+importFrom(rlang,.data)
