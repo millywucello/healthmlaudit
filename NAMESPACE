@@ -3,5 +3,7 @@
 S3method(print,healthmlaudit)
 export(audit_binary)
 export(audit_subgroups)
+export(bootstrap_ci)
+export(generate_report)
 export(plot_calibration)
 importFrom(rlang,.data)

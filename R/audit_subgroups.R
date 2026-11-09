@@ -27,11 +27,12 @@ audit_subgroups <- function(audit, group, min_n = 30) {
   if (!group %in% names(audit$data)) .stop(paste("Missing group column:", group))
   .check_number(min_n, "min_n", 1, .Machine$integer.max, integer = TRUE)
   x <- audit$data[[group]]
-  if (!(is.character(x) || is.factor(x) || is.logical(x) || is.numeric(x)) || !is.null(dim(x))) {
+  if (!(is.character(x) || is.factor(x) || is.logical(x) || is.numeric(x)) || !is.null(dim(x)) || is.complex(x)) {
     .stop("group must contain scalar categorical labels.")
   }
   if (is.numeric(x) && any(!is.finite(x[!is.na(x)]))) .stop("group contains non-finite labels.")
   x <- as.character(x)
+  if (any(!nzchar(trimws(x[!is.na(x)])))) .stop("group contains empty labels; use NA for missing groups.")
   labels <- unique(x)
   group_id <- match(x, labels)
   result <- do.call(rbind, lapply(seq_along(labels), function(i) {

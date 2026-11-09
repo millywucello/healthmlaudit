@@ -7,7 +7,7 @@
 }
 
 .check_number <- function(x, name, lower, upper, integer = FALSE) {
-  if (!is.numeric(x) || length(x) != 1L || is.na(x) || !is.finite(x) ||
+  if (!is.numeric(x) || is.complex(x) || length(x) != 1L || is.na(x) || !is.finite(x) ||
       x < lower || x > upper || (integer && x != floor(x))) {
     .stop(paste0(name, " must be ", if (integer) "an integer" else "a number",
                  " between ", lower, " and ", upper, "."))
@@ -33,11 +33,11 @@
       !na_action %in% c("error", "omit")) .stop('na_action must be "error" or "omit".')
   y <- data[[truth]]
   if (!(is.character(y) || is.factor(y) || is.numeric(y) || is.logical(y)) ||
-      !is.null(dim(y))) .stop("truth must contain scalar binary labels.")
+      !is.null(dim(y)) || is.complex(y)) .stop("truth must contain scalar binary labels.")
   if (is.numeric(y) && any(!is.finite(y[!is.na(y)]))) .stop("truth contains non-finite labels.")
   if (length(positive) != 1L || is.na(positive) ||
       !(is.character(positive) || is.numeric(positive) || is.logical(positive)) ||
-      !is.null(dim(positive)) || !nzchar(trimws(as.character(positive))) ||
+      !is.null(dim(positive)) || is.complex(positive) || !nzchar(trimws(as.character(positive))) ||
       (is.numeric(positive) && !is.finite(positive))) {
     .stop("positive must be one non-missing label.")
   }
@@ -50,7 +50,7 @@
     .stop("truth must be binary and positive must identify one of its classes.")
   }
   risk <- data[[prob]]
-  if (!is.numeric(risk) || !is.null(dim(risk))) .stop("prob must be a numeric probability column.")
+  if (!is.numeric(risk) || is.complex(risk) || !is.null(dim(risk))) .stop("prob must be a numeric probability column.")
   if (any(!is.finite(risk[!is.na(risk)])) || any(risk < 0 | risk > 1, na.rm = TRUE)) {
     .stop("prob must contain finite probabilities between 0 and 1.")
   }
