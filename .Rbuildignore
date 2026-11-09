@@ -1,0 +1,8 @@
+^\.github$
+^docs$
+^scripts$
+^data-raw$
+^README\.md$
+^LICENSE\.md$
+^.*\.Rproj$
+^\.Rproj\.user$

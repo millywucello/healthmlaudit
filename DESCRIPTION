@@ -1,0 +1,28 @@
+Package: healthmlaudit
+Title: Audit Binary Classification Predictions
+Version: 0.1.0
+Authors@R: person("Milly", "Wu", role = c("aut", "cre"),
+    email = "125825028+millywucello@users.noreply.github.com")
+Description: Evaluates binary classification predictions with an explicit
+    positive class and a shared input contract. Provides performance metrics,
+    binned calibration plots, subgroup summaries, percentile bootstrap
+    intervals, and Markdown reports. Includes synthetic example predictions
+    and documented handling of missing and undefined results.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Depends: R (>= 4.1.0)
+Imports:
+    ggplot2 (>= 3.4.0),
+    rlang,
+    yardstick (>= 1.3.1)
+Suggests:
+    knitr,
+    rmarkdown,
+    testthat (>= 3.0.0)
+VignetteBuilder: knitr
+LazyData: true
+Config/testthat/edition: 3
+Roxygen: list(markdown = TRUE)
+URL: https://github.com/millywucello/healthmlaudit
+BugReports: https://github.com/millywucello/healthmlaudit/issues
+RoxygenNote: 7.2.3
